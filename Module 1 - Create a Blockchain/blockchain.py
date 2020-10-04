@@ -12,7 +12,7 @@ class Blockchain:
     
     def __init__(self):
        self.chain = []
-       self.create_block(proof = 1, previous_hash = '0') # sha256 output is a string
+       self.create_block(proof = 1, previous_hash = '0') # genesis block, sha256 output is a string
        
     def create_block(self, proof, previous_hash):
         block = {'index': len(self.chain) + 1,
@@ -91,6 +91,16 @@ def mine_block():
 def get_chain():
     response = {'chain': blockchain.chain,
                 'length': len(blockchain.chain)}
+    return jsonify(response), 200
+
+# Check if the Blockchain is valid
+@app.route('/is_valid', methods = ['GET'])
+def is_valid():
+    is_valid = blockchain.is_chain_valid(blockchain.chain)
+    if is_valid:
+        response = {'message': 'The Blockchain is valid.'}
+    else:
+        response = {'message': 'The Blockchain is not valid.'}
     return jsonify(response), 200
 
 
