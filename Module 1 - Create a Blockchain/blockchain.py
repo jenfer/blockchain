@@ -26,7 +26,7 @@ class Blockchain:
     def get_previous_block(self):
         return self.chain[-1] # -1 refers to the last index in the list
     
-    # This is the target threshold set by the network for the miners
+    # This is the target threshold set by the network for the miners to solve
     def proof_of_work(self, previous_proof):
         new_proof = 1;
         check_proof = False
