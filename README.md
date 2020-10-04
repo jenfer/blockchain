@@ -9,4 +9,4 @@ The following tools must be installed:
 4. Postman API
 
 
-You can also use PyCharm if you want a better UI.
+You can also use PyCharm if you want to use a better IDE.
