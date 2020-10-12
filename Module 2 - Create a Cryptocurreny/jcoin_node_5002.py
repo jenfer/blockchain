@@ -42,6 +42,7 @@ class Blockchain:
     def proof_of_work(self, previous_proof):
         new_proof = 1;
         check_proof = False
+        # Trial and error generation of hash 
         while check_proof is False:
             hash_operation = hashlib.sha256(str(new_proof**2 - previous_proof**2).encode()).hexdigest()
             if hash_operation[:4] == '0000':
@@ -185,7 +186,7 @@ def connect_node():
 def replace_chain():
     is_chain_replaced = blockchain.replace_chain()
     if is_chain_replaced:
-        response = {'message': 'The nodes have different chains. Blockchain has been replaced.',
+        response = {'message': 'The nodes have different chains. Blockchain has been replaced with the longest chain.',
                     'new_chain': blockchain.chain}
     else:
         response = {'message': 'The Blockchain is the largest chain.',

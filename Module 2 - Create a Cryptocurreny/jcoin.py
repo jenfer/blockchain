@@ -30,15 +30,23 @@ class Blockchain:
                  'previous_hash': previous_hash,
                  'transactions': self.transactions}
         
-        # txns must be cleared once added in the block to avoid duplicate
+        # Transactions must be cleared once added to the block to avoid duplicate
         self.transactions = []
         self.chain.append(block)
         return block
     
+    '''
+    Get the previous block by simply gettng the last index in the chain.
+    In Python list, -1 refers to the last index in the list.
+    '''
     def get_previous_block(self):
-        return self.chain[-1] # -1 refers to the last index in the list
+        return self.chain[-1]
     
-    # This is the target threshold set by the network for the miners to solve
+    '''
+    The successful hash generated below target is the Proof of Work.
+    The target threshold normally starts with leading zeroes e.g. "0000" & in reality, adjusted every 2 weeks.
+    The while loop demonstrates the trial and error generation of hash until it finds a hash below the target.
+    '''
     def proof_of_work(self, previous_proof):
         new_proof = 1;
         check_proof = False
@@ -49,8 +57,12 @@ class Blockchain:
             else:
                 new_proof += 1
         return new_proof
-            
-    # This will return the SHA256 hash value of the block/data
+       
+    '''
+    This will return the SHA-256 hash value of the block.
+    Json.dumps() function converts a Python object into a json string.
+    sort_keys = True so the output of dictionaries will be sorted by key.
+    '''
     def hash(self, block):
         encoded_block = json.dumps(block, sort_keys = True).encode()
         return hashlib.sha256(encoded_block).hexdigest()
@@ -69,6 +81,12 @@ class Blockchain:
                 return False
             previous_proof = previous_block['proof']
             proof = block['proof']
+            
+            '''
+            The operation to generate the hash must be not symmetrical which means 
+                the result must be different when the variables are interchanged. 
+                Below formula will avoid collision. proof - prev != prev - proof
+            '''
             hash_operation = hashlib.sha256(str(proof**2 - previous_proof**2).encode()).hexdigest()
             if hash_operation[:4] != '0000':
                     return False
@@ -76,6 +94,7 @@ class Blockchain:
             block_index += 1
         return True
     
+    # The sender and receiver refers to the wallet address or public key of users
     def add_transaction(self, sender, receiver, amount):
         self.transactions.append({'sender': sender,
                                   'receiver': receiver,
@@ -87,7 +106,10 @@ class Blockchain:
         parsed_url = urlparse(address)
         self.nodes.add(self, parsed_url.netloc)
     
-    # This function will primarily be used as part of the consensuss
+    '''
+    This function will primarily act as the Consensus Protocol.
+    Consensus is an algorithm that ensures all the node contains the same chain.
+    '''
     def replace_chain(self):
         network = self.nodes
         longest_chain = None
@@ -101,11 +123,14 @@ class Blockchain:
                 if length > max_length and self.is_chain_valid(chain):
                     max_length = length
                     longest_chain = chain
-            # Check if longest_chain is not None anymore (hence, replaced)
+            '''
+            Check if  longest_chain is no longer set to None. 
+            If yes, update the chain and then return True. Else, return False.
+            '''
             if longest_chain: 
                 self.chain = longest_chain    
                 return True
-            return False # Else, not yet replaced
+            return False
 
 # Part 2- Mining our Blockchain
 
@@ -116,8 +141,10 @@ app = Flask(__name__)
 node_address = str(uuid4()).replace('-', '')
 
 # Creating a Blockchain
-blockchain = Blockchain() # this is the same as Instantiation
+# This is the same as Instantiation
+blockchain = Blockchain() 
 
+# Adding the block into the chain
 @app.route('/mine_block', methods = ['GET'])
 def mine_block():
     previous_block = blockchain.get_previous_block()
@@ -152,6 +179,7 @@ def is_valid():
     return jsonify(response), 200
 
 # Adding a new transaction to the Blockchain
+# Once added, it has to be mined first before it will appear in the chain.
 @app.route('/add_transaction', methods = ['POST'])
 def add_transaction():
     json = request.get_json()
@@ -163,11 +191,14 @@ def add_transaction():
     response = {'message': f'This transaction will be added to Block {index}'}
     return jsonify(response), 201 # HTTP Status code Created
 
+
 # Part 3 - Decentralizing our Blockchain
 
-# Connecting new nodes or simply connecting to the blockchain network
-# You need to provide the ip address of the nodes that are in the network
-# Note: nodes must be pulled somewhere (in the network) instead of sending a json file... 
+'''
+Connecting new nodes or simply connecting to the blockchain network.
+You need to provide the ip address of the nodes that are in the network.
+Note: nodes must be pulled somewhere (in the network?) instead of sending a json file... 
+'''
 @app.route('/connect_node', methods = ['POST'])
 def connect_node():
     json = request.get_json()

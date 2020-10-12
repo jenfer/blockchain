@@ -1,4 +1,4 @@
-# Creating a Blockchain, Cryptocurrency and Smart Contracts
+# Blockchain, Cryptocurrency and Smart Contracts
 A basic decentralized blockchain running in Python with 3 sample nodes (miners).
 
 
@@ -23,7 +23,7 @@ https://anaconda.org/
 ```
 
 
-Install Flask. You can also update Flash after installation.
+Install Flask. You can also update Flask after installation.
 ```
 pip install Flask
 ```
