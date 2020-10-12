@@ -11,7 +11,7 @@ import json
 from flask import Flask, jsonify, request
 import requests
 from uuid import uuid4
-from urlib.parse import urlparse
+from urllib.parse import urlparse
 
 # Part 1 - Building a Blockchain
 
@@ -21,6 +21,7 @@ class Blockchain:
        self.chain = []
        self.transactions = []
        self.create_block(proof = 1, previous_hash = '0') # genesis block, sha256 output is a string
+       self.nodes = set()
        
     def create_block(self, proof, previous_hash):
         block = {'index': len(self.chain) + 1,
@@ -81,6 +82,10 @@ class Blockchain:
                                   'amount': amount})
         previous_block = self.get_previous_block();
         return previous_block['index']
+    
+    def add_node(self, address):
+        parsed_url = urlparse(address)
+        self.nodes.add(self, parsed_url.netloc)
 
 # Part 2- Mining our Blockchain
 
