@@ -85,7 +85,7 @@ class Blockchain:
     
     def add_node(self, address):
         parsed_url = urlparse(address)
-        self.nodes.add(self, parsed_url.netloc)
+        self.nodes.add(parsed_url.netloc)
     
     # This function will primarily be used as part of the consensuss
     def replace_chain(self):
@@ -124,7 +124,7 @@ def mine_block():
     previous_proof = previous_block['proof']
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
-    blockchain.add_transaction(sender = node_address, receiver = 'Jenn', amount = 100)
+    blockchain.add_transaction(sender = node_address, receiver = 'Hadelin', amount = 100)
     block = blockchain.create_block(proof, previous_hash)
     response = {'message': 'Congratulations, you just mined a block!',
                 'index': block['index'],
@@ -193,4 +193,4 @@ def replace_chain():
     return jsonify(response), 200
     
 # Running the app using Flask
-app.run(host = '0.0.0.0', port = '5000')
+app.run(host = '0.0.0.0', port = '5001')

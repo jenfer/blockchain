@@ -1,0 +1,7 @@
+# sender and receiver must be the address or public key
+
+{
+    "sender" : "",
+    "receiver" : "",
+    "amount" : 
+}
