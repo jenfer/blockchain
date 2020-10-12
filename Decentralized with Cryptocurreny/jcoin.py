@@ -109,6 +109,7 @@ class Blockchain:
     '''
     This function will primarily act as the Consensus Protocol.
     Consensus is an algorithm that ensures all the node contains the same chain.
+    Note: Should this function be called every mine?
     '''
     def replace_chain(self):
         network = self.nodes
