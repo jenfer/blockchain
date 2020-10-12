@@ -1,13 +1,17 @@
-# Module 1 - Create a Blockchain
+# Module 2 - Create a Cryptocurrency
 # To be installed: 
 # Flask : pip install Flask
 # Postman HTTP client: www.getpostman.com
 # requests: pip install requests
 
+# Importing libraries
 import datetime
 import hashlib
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import requests
+from uuid import uuid4
+from urlib.parse import urlparse
 
 # Part 1 - Building a Blockchain
 
@@ -15,14 +19,18 @@ class Blockchain:
     
     def __init__(self):
        self.chain = []
+       self.transactions = []
        self.create_block(proof = 1, previous_hash = '0') # genesis block, sha256 output is a string
        
     def create_block(self, proof, previous_hash):
         block = {'index': len(self.chain) + 1,
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,
-                 'previous_hash': previous_hash}
+                 'previous_hash': previous_hash,
+                 'transactions': self.transactions}
         
+        # txns must be cleared once added in the block to avoid duplicate
+        self.transactions = []
         self.chain.append(block)
         return block
     
@@ -66,6 +74,13 @@ class Blockchain:
             previous_block = block
             block_index += 1
         return True
+    
+    def add_transaction(self, sender, receiver, amount):
+        self.transactions.append({'sender': sender,
+                                  'receiver': receiver,
+                                  'amount': amount})
+        previous_block = self.get_previous_block();
+        return previous_block['index']
 
 # Part 2- Mining our Blockchain
 
@@ -106,6 +121,7 @@ def is_valid():
         response = {'message': 'The Blockchain is not valid.'}
     return jsonify(response), 200
 
+# Part 3 - Decentralizing our Blockchain
 
 # Running the app using Flask
 app.run(host = '0.0.0.0', port = '5000')
