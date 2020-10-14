@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 // Jcoin ICO
 
 //Version of compiler
