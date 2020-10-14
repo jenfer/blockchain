@@ -1,4 +1,4 @@
-# Module 1 - Create a Blockchain
+# Create a Blockchain
 # To be installed: 
 # Flask : pip install Flask
 # Postman HTTP client: www.getpostman.com

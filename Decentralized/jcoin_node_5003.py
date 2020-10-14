@@ -1,4 +1,4 @@
-# Module 2 - Create a Cryptocurrency
+# Create a Cryptocurrency
 # To be installed: 
 # Flask : pip install Flask
 # Postman HTTP client: www.getpostman.com
